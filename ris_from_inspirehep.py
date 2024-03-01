@@ -168,6 +168,7 @@ def get_ris(json_entry, name, keep_affiliation, dois_to_exclude):
     else:
       selected_authors.append(f'et al. ({collab_str})')
   ris['au'] = selected_authors
+  ris['er'] = ''
 
   ris_lines = []
   for ris_key, ris_val in ris.items():
@@ -185,7 +186,8 @@ def exclude_dois_from(fn):
     logging.debug(f'Excluding DOIs recorded in {fn}')
     if not os.path.isfile(fn):
       raise RuntimeError("No such file: %s" % fn)
-    with open(fn, 'r', encoding = 'utf-16') as fptr:
+    #NB! open() may require the "encoding" argument to be set to "utf-16" if the RIS file is downloaded from ETIS
+    with open(fn, 'r') as fptr:
       for line in fptr:
         line_stripped = line.strip()
         if line_stripped.startswith('DO '):
@@ -290,6 +292,7 @@ if __name__ == '__main__':
     for json_entry in json_hits_data:
       ris_lines = get_ris(json_entry, name, keep_affiliation, dois_to_exclude)
       if ris_lines:
+        ris_lines.insert(0, f'{len(ris_data) + 1}.')
         ris_data.append('\n'.join(ris_lines))
 
     json_links = json_payload['links']
