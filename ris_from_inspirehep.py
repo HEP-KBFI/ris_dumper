@@ -100,7 +100,7 @@ def select(authors, name, keep_affiliation):
       pass
     else:
       if keep_affiliation:
-        selected_authors.append(author)
+        selected_authors.append(name)
       else:
         # ignore the publication
         selected_authors = []
