@@ -187,13 +187,19 @@ def exclude_dois_from(fn):
     if not os.path.isfile(fn):
       raise RuntimeError("No such file: %s" % fn)
     #NB! open() may require the "encoding" argument to be set to "utf-16" if the RIS file is downloaded from ETIS
+    # Alternatively, you can convert the RIS file from UTF-16 to UTF-8 as follows:
+    # iconv -f UTF-16 -t UTF-8 PublicationDocument.ris -o PublicationDocument8.ris
+    # and pass the resulting "PublicationDocument8.ris" file as argument to --exclude.
     with open(fn, 'r') as fptr:
       for line in fptr:
         line_stripped = line.strip()
         if line_stripped.startswith('DO '):
-          line_split = line_stripped.split(' - ')
+          line_split = line_stripped.split(' -')
           if len(line_split) != 2:
             raise RuntimeError("Not a RIS file: %s" % fn)
+          if not line_split[1]:
+             # Can also be a TDR, which is classified as book
+             continue
           doi = line_split[1].strip().replace('https', 'http').replace('http://dx.doi.org/', '')
           to_exclude.append(doi)
     logging.debug(f'Found {len(to_exclude)} DOI(s) that we can exclude')
