@@ -131,12 +131,21 @@ def get_ris(json_entry, name, keep_affiliation, dois_to_exclude):
     print(json.dumps(json_metadata, indent = 2))
     raise RuntimeError("No publication year found in the above entry")
   pubinfo = json_metadata['publication_info'][pub_idx]
+  title = ''
+  for title_candidate in json_metadata['titles']:
+    if title_candidate['source'] == 'arXiv' and '\n' not in title_candidate['title']:
+      title = title_candidate['title'].replace('\\\\', '\\')
+      break
+  if not title:
+    # just take the 1st title
+    title = json_metadata['titles'][0]['title']
+  title = title.replace('$$', '')
   ris = collections.OrderedDict([
     ('ty', get_doctype(json_metadata['document_type'][0])),
     ('py', pubinfo['year']),
     ('jo', pubinfo['journal_title']),
     ('vl', pubinfo['journal_volume']),
-    ('t1', json_metadata['titles'][0]['title']),
+    ('t1', title),
     ('do', f"https://dx.doi.org/{doi}"),
     ('db', 'WoS'),
     ('dp', 'WoS'),
