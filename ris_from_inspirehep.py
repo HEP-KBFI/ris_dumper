@@ -199,7 +199,7 @@ def exclude_dois_from(fn):
     # Alternatively, you can convert the RIS file from UTF-16 to UTF-8 as follows:
     # iconv -f UTF-16 -t UTF-8 PublicationDocument.ris -o PublicationDocument8.ris
     # and pass the resulting "PublicationDocument8.ris" file as argument to --exclude.
-    with open(fn, 'r') as fptr:
+    with open(fn, 'r', encoding="utf-16") as fptr:
       for line in fptr:
         line_stripped = line.strip()
         if line_stripped.startswith('DO '):
