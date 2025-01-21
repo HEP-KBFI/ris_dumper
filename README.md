@@ -29,4 +29,6 @@ It should print something like this
 ```
 
 3. Double check the new publications file `publications.ris` using a text editor. Check that all DOIs exist, check manually that the DOIs lead to the correct place.
-4. Upload the new publications file to ETIS. Do not forget to associate the authors also in ETIS!
+4. Upload the new publications file to ETIS
+  - Publications -> Import -> RIS file
+  - Do not forget to associate the authors also in ETIS: Authors with ETIS account!
